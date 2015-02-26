@@ -26,12 +26,20 @@ object ShoppingCart{
   }
 
   def main(args: Array[String]) : Unit = {
-    var catalog = Vector.empty[String]
-    catalog = catalog :+ "stst"
+    var catalog = Vector.empty[Int]
+    catalog = catalog :+ 11
+    catalog :+= 12
+    catalog :+= 13
+    catalog :+= 14
+    catalog :+= 15
 
-    println(catalog)
-    var test = testCase("testCase1")
-    println(test.tes)
+    var evennum =
+      for{
+        number <- catalog
+        if number %2 == 0
+      }yield number
+
+    print(evennum)
 
   }
 }
