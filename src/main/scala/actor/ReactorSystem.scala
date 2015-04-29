@@ -1,7 +1,9 @@
 package actor
 
-import akka.actor.Actor.Receive
 import akka.actor._
+import com.okcoin.OkcoinAccess
+import com.okcoin.stock.bean.Ticker
+import com.okcoin.stock.strategy.TrixCalac
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{ExecutionContext, Future}
@@ -14,6 +16,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class ReactorSystem {
 
 }
+
+case class GetStock(id:Long)
 
 class Task extends Actor {
 
@@ -35,16 +39,36 @@ class Task extends Actor {
       println("become housekepper")
       context.become(taskDestinator)
   }
+  val okcoin = new OkcoinAccess
+  val trixcalac = new TrixCalac
+  val trader = context.actorOf(Props[TradeActor],"trader")
 
   def taskDestinator : Receive = {
-    case _ =>
+
+    case GetStock(id) =>
       implicit val ec:ExecutionContext = context.dispatcher
-      val timeoutMessenger = context.system.scheduler.scheduleOnce(Duration.create(10,"seconds")){
-        println("task destinator")
+      val timeoutMessenger = context.system.scheduler.scheduleOnce(Duration.create(1,"seconds")){
+        var ticker:Ticker = okcoin.retrieveMsg()
+        var trixres:String = trixcalac.calacTr(ticker.getLast)
+        trader!trixres
       }
+    case _ => None
+
   }
+}
 
+class TradeActor extends Actor{
+  def receive = {
+    case "buy" =>
+      println("buy stock")
+      sender()!GetStock(1)
+    case "sell"=>
+      println("sell stock")
+      sender()!GetStock(1)
+    case _ =>
+      sender()!GetStock(1)
 
+  }
 }
 
 object ReactorSystem{
@@ -53,7 +77,7 @@ object ReactorSystem{
     var task = as.actorOf(Props[Task],"task")
 
     task!"test"
-    task!"test"
+    task!GetStock(1)
 
 //    as.shutdown()
   }
