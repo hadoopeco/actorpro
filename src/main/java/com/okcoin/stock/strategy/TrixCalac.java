@@ -20,8 +20,6 @@ public class TrixCalac {
         String flag = "";
         if(mashort == null){
             mashort = new MaVo(price,price,price);
-//            trix = price;
-//            mtrix = price;
         }else{
             float ma1 = (2l*price + 11l*mashort.getMa1())/13l;
             float ma2 = (2l*ma1 + 11l*mashort.getMa2())/13l;

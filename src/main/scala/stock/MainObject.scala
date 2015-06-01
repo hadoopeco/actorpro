@@ -1,6 +1,6 @@
 package stock
 
-import akka.actor.{Props, ActorSystem, Actor}
+import akka.actor.{Actor, Props}
 
 /**
  * Author: weibin(weibin521@pingan.com.cn)
@@ -12,10 +12,12 @@ class MainObject {
 }
 
 object Main extends App{
-  val as = ActorSystem("stocksystem")
-  val tactor = as.actorOf(Props[TestActor],"name")
-  tactor ! "test"
+
+
+
 }
+
+
 
 class TestActor extends Actor{
   def receive = {
