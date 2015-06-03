@@ -14,20 +14,19 @@ class OkCoinSystem extends Actor with ActorLogging{
   import context.dispatcher
   val okcoin = new OkcoinAccess
   var tickerque = new mutable.Queue[Float]
-  val okActor = context.actorOf(Props[OkCoinSystem])
-  context.system.scheduler.schedule(2 minutes,1 seconds){
-    val ticker = okcoin.retrieveMsg()
-
-    if(tickerque.size>=20){
-      tickerque.dequeue()
-    }
-    tickerque += ticker.getLast
-    log.info("current price = {}", ticker.getLast)
-    if(tickerque.size >= 20) {
-      okActor ! Indicator(tickerque, ticker.getLast)
-    }else{
-      log.info("prices size less than 20  size = {}",tickerque.size)
-    }
+  var running  = false
+  context.system.scheduler.schedule(20 seconds,5 seconds){
+      val ticker = okcoin.retrieveMsg()
+      if (tickerque.size >= 20) {
+        tickerque.dequeue()
+      }
+      tickerque += ticker.getLast
+      log.info("current price = {}", ticker.getLast)
+      if (tickerque.size >= 20) {
+        self ! Indicator(tickerque, ticker.getLast)
+      } else {
+        log.info("prices size less than 20  size = {}", tickerque.size)
+      }
   }
 
   var buyflag:Boolean = false
@@ -55,8 +54,7 @@ class OkCoinSystem extends Actor with ActorLogging{
 
 object OkCoinSystem extends App{
   val  sac = ActorSystem.create("stockSystem")
-  val  os = sac.actorOf(Props[OkCoinSystem],"ok")
-
+  sac.actorOf(Props[OkCoinSystem])
 
 }
 
