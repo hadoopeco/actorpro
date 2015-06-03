@@ -16,19 +16,23 @@ import java.io.IOException;
  */
 public class OkcoinAccess {
 
-//    IStockRestApi stockGet = new StockRestApi(url_prex);
     IStockRestApi stockPost = new StockRestApi(url_prex, api_key, secret_key);
-    public Ticker retrieveMsg() throws IOException, HttpException {
-        String result = stockPost.ticker(trade_coin);
-        String tickerStr = StringUtils.substring(result, result.indexOf("\"ticker\":") + 9, result.length() - 1);
-        Ticker ticker = JSON.parseObject(tickerStr, Ticker.class);
+    public Ticker retrieveMsg() {
+        Ticker ticker = null;
+        try {
+            String result = stockPost.ticker(trade_coin);
+            String tickerStr = StringUtils.substring(result, result.indexOf("\"ticker\":") + 9, result.length() - 1);
+            ticker = JSON.parseObject(tickerStr, Ticker.class);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return ticker;
     }
 
     public void buyTicker(Float buyprice){
 
         try {
-            stockPost.trade(trade_coin, "buy", String.valueOf(buyprice+1), "0.1");
+            stockPost.trade(trade_coin, "buy", String.valueOf(buyprice+1), "0.16");
         } catch (HttpException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -39,7 +43,7 @@ public class OkcoinAccess {
 
     public void sellTicker(Float buyprice){
         try {
-            stockPost.trade(trade_coin, "sell",  String.valueOf(buyprice-1),"0.1");
+            stockPost.trade(trade_coin, "sell",  String.valueOf(buyprice-1),"0.16");
         } catch (HttpException e) {
             e.printStackTrace();
         } catch (IOException e) {
