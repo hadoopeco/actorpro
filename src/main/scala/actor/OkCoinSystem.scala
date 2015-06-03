@@ -1,7 +1,6 @@
 package actor
 
-import actor.Indicator
-import akka.actor.{ActorLogging, Props, ActorSystem, Actor}
+import akka.actor.{Actor, ActorLogging, ActorSystem, Props}
 import com.okcoin.OkcoinAccess
 
 import scala.collection.mutable
@@ -15,28 +14,32 @@ class OkCoinSystem extends Actor with ActorLogging{
   val okcoin = new OkcoinAccess
   var tickerque = new mutable.Queue[Float]
   var running  = false
-  context.system.scheduler.schedule(20 seconds,5 seconds){
+  context.system.scheduler.schedule(10 seconds,20 seconds){
       val ticker = okcoin.retrieveMsg()
-      if (tickerque.size >= 20) {
-        tickerque.dequeue()
-      }
-      tickerque += ticker.getLast
-      log.info("current price = {}", ticker.getLast)
-      if (tickerque.size >= 20) {
-        self ! Indicator(tickerque, ticker.getLast)
-      } else {
-        log.info("prices size less than 20  size = {}", tickerque.size)
-      }
+     if (ticker != null){
+        if (tickerque.size >= 20) {
+          tickerque.dequeue()
+        }
+        tickerque += ticker.getLast
+        if (tickerque.size >= 20) {
+          self ! Indicator(tickerque, ticker.getLast)
+        } else {
+          log.info("prices size less than 20  size = {}", tickerque.size)
+        }
+     }else{
+       log.info("get null ticker")
+     }
   }
 
   var buyflag:Boolean = false
   override def receive: Receive = {
     case Indicator(price,curprice)=>
-      if (curprice > price.max && !buyflag) {
+      log.info("Indicator price {}", curprice)
+      if (curprice >= price.max && !buyflag) {
           log.info("buy the ticket price {}", curprice)
           self ! BuyOKTicker("buy", curprice)
           buyflag = true
-      }else if(curprice < price.min && buyflag){
+      }else if(curprice <= price.min && buyflag){
           log.info("sell the ticket price {}", curprice)
           self ! BuyOKTicker("sell", curprice)
           buyflag = false
@@ -55,7 +58,6 @@ class OkCoinSystem extends Actor with ActorLogging{
 object OkCoinSystem extends App{
   val  sac = ActorSystem.create("stockSystem")
   sac.actorOf(Props[OkCoinSystem])
-
 }
 
 
