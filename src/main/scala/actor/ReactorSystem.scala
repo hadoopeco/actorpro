@@ -5,8 +5,8 @@ import com.okcoin.OkcoinAccess
 import com.okcoin.stock.bean.Ticker
 import com.okcoin.stock.strategy.TrixCalac
 
+import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.Duration
-import scala.concurrent.{ExecutionContext, Future}
 
 /**
  * Author: weibin(weibin521@pingan.com.cn)
@@ -49,8 +49,7 @@ class Task extends Actor {
       implicit val ec:ExecutionContext = context.dispatcher
       val timeoutMessenger = context.system.scheduler.scheduleOnce(Duration.create(1,"seconds")){
         var ticker:Ticker = okcoin.retrieveMsg()
-        var trixres:String = trixcalac.calacTr(ticker.getLast)
-        trader!trixres
+
       }
     case _ => None
 
@@ -76,7 +75,6 @@ object ReactorSystem{
     val as = ActorSystem("EnterPriseActor")
     var task = as.actorOf(Props[Task],"task")
 
-    task!"test"
     task!GetStock(1)
 
 //    as.shutdown()
