@@ -2,6 +2,10 @@ package com.okcoin.stock;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,8 +22,22 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.params.CookiePolicy;
+import org.apache.http.client.params.HttpClientParams;
+import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.CoreConnectionPNames;
+import org.apache.http.params.HttpParams;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 
 /**
@@ -33,8 +51,9 @@ public class HttpUtilManager {
 	private static HttpClient client;
 
 	private HttpUtilManager() {
-		client = new DefaultHttpClient();
-		}
+		PoolingClientConnectionManager manager= new PoolingClientConnectionManager();
+		client = new DefaultHttpClient(manager);
+	}
 
 	public static HttpUtilManager getInstance() {
 		return instance;
@@ -66,11 +85,16 @@ public class HttpUtilManager {
 		InputStream is = null;
 		String responseData = "";
 		try{
-		    is = entity.getContent();
-		    responseData = IOUtils.toString(is, "UTF-8");
+			is = entity.getContent();
+			if(is.available() > 0 ) {
+				responseData = IOUtils.toString(is, "UTF-8");
+			}else{
+				responseData = null;
+			}
 		}finally{
 			if(is!=null){
 			    is.close();
+				method.releaseConnection();
 			}
 		}
 		return responseData;

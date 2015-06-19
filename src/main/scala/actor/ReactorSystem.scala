@@ -71,12 +71,34 @@ class TradeActor extends Actor{
 }
 
 object ReactorSystem{
+  import scala.math._
   def main(args: Array[String]) {
-    val as = ActorSystem("EnterPriseActor")
-    var task = as.actorOf(Props[Task],"task")
+    val fun = ceil _
+    val a = Array(1.2,3.2,3.3,4.5) filter (p => p>2)
+//    print(ceil(4.1223))
+    println(test(ceil, 2.1))
+    val pa = mapBy(10)
+    println(pa(20))
 
-    task!GetStock(1)
+    (1 to 20).map{"*" * _}.foreach{println _}
 
-//    as.shutdown()
+    "mark test wark".split(" ").sortWith(_.length > _.length )
+
   }
+
+
+  def runTest(block: =>Unit){
+    block
+  }
+
+  def test(f:(Double) => Double,x:Double) = f(x)
+
+  def mapBy(factory:Double) = {
+    (x: Double) => {
+      print(factory)
+      factory * x
+    }
+  }
+
+
 }
