@@ -41,7 +41,7 @@ public class OkcoinAccess {
     public void buyTicker(Float buyprice){
 
         try {
-            stockPost.trade(trade_coin, "buy", String.valueOf(buyprice+1), "0.15");
+            stockPost.trade(trade_coin, "buy", String.valueOf(buyprice+1), "0.12");
         } catch (HttpException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -52,7 +52,7 @@ public class OkcoinAccess {
 
     public void sellTicker(Float buyprice){
         try {
-            stockPost.trade(trade_coin, "sell",  String.valueOf(buyprice-1),"0.15");
+            stockPost.trade(trade_coin, "sell",  String.valueOf(buyprice-1),"0.12");
         } catch (HttpException e) {
             e.printStackTrace();
         } catch (IOException e) {

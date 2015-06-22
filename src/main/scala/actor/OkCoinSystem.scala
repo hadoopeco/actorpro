@@ -16,7 +16,7 @@ class OkCoinSystem extends Actor with ActorLogging{
   var ticker10que = new mutable.Queue[Float]
   var count:Int = 30
 
-  context.system.scheduler.schedule(10 seconds,2 minutes){
+  context.system.scheduler.schedule(10 seconds,20 seconds){
      val ticker = okcoin.retrieveMsg()
      if (ticker != null) {
 //       if (count == 0) {
