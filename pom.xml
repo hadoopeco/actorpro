@@ -101,63 +101,63 @@
     </dependencies>
     <build>
         <plugins>
-        <plugin>
-            <groupId>net.alchim31.maven</groupId>
-            <artifactId>scala-maven-plugin</artifactId>
-            <version>3.2.0</version>
-            <executions>
-                <execution>
-                    <id>eclipse-add-source</id>
-                    <goals>
-                        <goal>add-source</goal>
-                    </goals>
-                </execution>
-                <execution>
-                    <id>scala-compile-first</id>
-                    <phase>process-resources</phase>
-                    <goals>
-                        <goal>compile</goal>
-                    </goals>
-                </execution>
-                <execution>
-                    <id>scala-test-compile-first</id>
-                    <phase>process-test-resources</phase>
-                    <goals>
-                        <goal>testCompile</goal>
-                    </goals>
-                </execution>
-                <execution>
-                    <id>attach-scaladocs</id>
-                    <phase>verify</phase>
-                    <goals>
-                        <goal>doc-jar</goal>
-                    </goals>
-                </execution>
-            </executions>
-            <configuration>
-                <scalaVersion>${scala.version}</scalaVersion>
-                <recompileMode>incremental</recompileMode>
-                <useZincServer>true</useZincServer>
-                <args>
-                    <arg>-unchecked</arg>
-                    <arg>-deprecation</arg>
-                    <arg>-feature</arg>
-                </args>
-                <jvmArgs>
-                    <jvmArg>-Xms1024m</jvmArg>
-                    <jvmArg>-Xmx1024m</jvmArg>
-                    <jvmArg>-XX:PermSize=${PermGen}</jvmArg>
-                    <jvmArg>-XX:MaxPermSize=${MaxPermGen}</jvmArg>
-                    <jvmArg>-XX:ReservedCodeCacheSize=${CodeCacheSize}</jvmArg>
-                </jvmArgs>
-                <javacArgs>
-                    <javacArg>-source</javacArg>
-                    <javacArg>${java.version}</javacArg>
-                    <javacArg>-target</javacArg>
-                    <javacArg>${java.version}</javacArg>
-                </javacArgs>
-            </configuration>
-        </plugin>
+        <!--<plugin>-->
+            <!--<groupId>net.alchim31.maven</groupId>-->
+            <!--<artifactId>scala-maven-plugin</artifactId>-->
+            <!--<version>3.2.0</version>-->
+            <!--<executions>-->
+                <!--<execution>-->
+                    <!--<id>eclipse-add-source</id>-->
+                    <!--<goals>-->
+                        <!--<goal>add-source</goal>-->
+                    <!--</goals>-->
+                <!--</execution>-->
+                <!--<execution>-->
+                    <!--<id>scala-compile-first</id>-->
+                    <!--<phase>process-resources</phase>-->
+                    <!--<goals>-->
+                        <!--<goal>compile</goal>-->
+                    <!--</goals>-->
+                <!--</execution>-->
+                <!--<execution>-->
+                    <!--<id>scala-test-compile-first</id>-->
+                    <!--<phase>process-test-resources</phase>-->
+                    <!--<goals>-->
+                        <!--<goal>testCompile</goal>-->
+                    <!--</goals>-->
+                <!--</execution>-->
+                <!--<execution>-->
+                    <!--<id>attach-scaladocs</id>-->
+                    <!--<phase>verify</phase>-->
+                    <!--<goals>-->
+                        <!--<goal>doc-jar</goal>-->
+                    <!--</goals>-->
+                <!--</execution>-->
+            <!--</executions>-->
+            <!--<configuration>-->
+                <!--<scalaVersion>${scala.version}</scalaVersion>-->
+                <!--<recompileMode>incremental</recompileMode>-->
+                <!--<useZincServer>true</useZincServer>-->
+                <!--<args>-->
+                    <!--<arg>-unchecked</arg>-->
+                    <!--<arg>-deprecation</arg>-->
+                    <!--<arg>-feature</arg>-->
+                <!--</args>-->
+                <!--<jvmArgs>-->
+                    <!--<jvmArg>-Xms1024m</jvmArg>-->
+                    <!--<jvmArg>-Xmx1024m</jvmArg>-->
+                    <!--<jvmArg>-XX:PermSize=${PermGen}</jvmArg>-->
+                    <!--<jvmArg>-XX:MaxPermSize=${MaxPermGen}</jvmArg>-->
+                    <!--<jvmArg>-XX:ReservedCodeCacheSize=${CodeCacheSize}</jvmArg>-->
+                <!--</jvmArgs>-->
+                <!--<javacArgs>-->
+                    <!--<javacArg>-source</javacArg>-->
+                    <!--<javacArg>${java.version}</javacArg>-->
+                    <!--<javacArg>-target</javacArg>-->
+                    <!--<javacArg>${java.version}</javacArg>-->
+                <!--</javacArgs>-->
+            <!--</configuration>-->
+        <!--</plugin>-->
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
@@ -170,9 +170,26 @@
                 <fork>true</fork>
             </configuration>
         </plugin>
+
+
         <plugin>
-            <groupId>net.alchim31.maven</groupId>
-            <artifactId>scala-maven-plugin</artifactId>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>2.3</version>
+            <executions>  <!--执行器 mvn assembly:assembly-->
+                <execution>
+                    <id>make-zip</id><!--名字任意 -->
+                    <phase>package</phase><!-- 绑定到package生命周期阶段上 -->
+                    <goals>
+                        <goal>single</goal><!-- 只运行一次 -->
+                    </goals>
+                    <configuration>
+                        <descriptors> <!--描述文件路径-->
+                            <descriptor>src/main/resources/assembly.xml</descriptor>
+                        </descriptors>
+                    </configuration>
+                </execution>
+            </executions>
         </plugin>
         </plugins>
     </build>
