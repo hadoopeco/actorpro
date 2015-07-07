@@ -1,7 +1,9 @@
 package actor
 
+import actor.BuyOKTicker
 import akka.actor.{Props, ActorSystem, Actor, ActorLogging}
 import com.okcoin.OkcoinAccess
+import com.okcoin.stock.bean.Ticker
 
 import scala.collection.mutable
 import scala.concurrent.duration._
@@ -15,9 +17,22 @@ class OkCoinSystem extends Actor with ActorLogging{
   var tickerque = new mutable.Queue[Float]
   var ticker10que = new mutable.Queue[Float]
   var count:Int = 30
+  var ticker:Ticker = null
+  context.system.scheduler.schedule(10 seconds,10 seconds){
+    ticker = okcoin.retrieveMsg()
+    val curprice = ticker.getLast
+    if(curprice > maxprice) maxprice = curprice
 
-  context.system.scheduler.schedule(10 seconds,20 seconds){
-     val ticker = okcoin.retrieveMsg()
+    if(curprice > tradedPrice && tradedPrice!=0 && !buyflag){
+      self!BuyOKTicker("buy",curprice)
+    }
+
+    if((curprice < tradedPrice || curprice*(1+0.005) < maxprice) && buyflag){
+      self ! BuyOKTicker("sell", curprice)
+    }
+  }
+
+  context.system.scheduler.schedule(10 seconds,3 minutes){
      if (ticker != null) {
 //       if (count == 0) {
          if (tickerque.size >= 20) {
@@ -37,6 +52,8 @@ class OkCoinSystem extends Actor with ActorLogging{
   }
 
   var buyflag:Boolean = false
+  var tradedPrice:Float = 0
+  var maxprice:Float = 0
   override def receive: Receive = {
     case Indicator(allprice,curprice)=>
       log.info("Indicator price {}", curprice)
@@ -53,19 +70,26 @@ class OkCoinSystem extends Actor with ActorLogging{
       val ema20 = total / 210
       val ema10 = part10 / 28
       log.info("Indicator price ema10 {} eam20 {}",ema10,ema20 )
+
+
+
       if ( ema10 >= ema20 && !buyflag) {
-          log.info("buy the ticket price {}", curprice)
           self ! BuyOKTicker("buy", curprice)
-          buyflag = true
       }else if(ema10 <=  ema20 && buyflag){
-          log.info("sell the ticket price {}", curprice)
+
           self ! BuyOKTicker("sell", curprice)
-          buyflag = false
       }
     case msg@BuyOKTicker("buy",curprice) =>
+      tradedPrice = curprice
+      maxprice = curprice
+      buyflag = true
+      log.info("buy the ticket price {}", curprice)
       okcoin.buyTicker(curprice)
 
     case msg@BuyOKTicker("sell",curprice) =>
+      tradedPrice = curprice
+      buyflag = false
+      log.info("sell the ticket price {}", curprice)
       okcoin.sellTicker(curprice)
     case _ =>
       println("recieve message")
