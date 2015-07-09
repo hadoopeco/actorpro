@@ -15,6 +15,16 @@
         <CodeCacheSize>512m</CodeCacheSize>
         <scala.version>2.11.6</scala.version>
     </properties>
+
+
+   <repositories>
+        <repository>
+            <id>dc_public</id>
+            <name>Dukascopy public repository</name>
+            <url>http://www.dukascopy.com/client/jforexlib/publicrepo/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>com.typesafe.akka</groupId>
@@ -66,6 +76,32 @@
             <artifactId>cxf-rt-core</artifactId>
             <version>2.7.3</version>
         </dependency>
+
+        <!-- dukascopy  api -->
+        <!--<dependency>-->
+            <!--<groupId>com.dukascopy.dds2</groupId>-->
+            <!--<artifactId>DDS2-jClient-JForex</artifactId>-->
+            <!--&lt;!&ndash; find the latest available version here:-->
+                <!--http://www.dukascopy.com/client/jforexlib/publicrepo/com/dukascopy/dds2/DDS2-jClient-JForex/-->
+            <!--&ndash;&gt;-->
+            <!--<version>2.45.2</version>-->
+            <!--<exclusions>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.slf4j</groupId>-->
+                    <!--<artifactId>slf4j-jdk14</artifactId>-->
+                <!--</exclusion>-->
+            <!--</exclusions>-->
+        <!--</dependency>-->
+        <!--&lt;!&ndash; find the latest available version here:-->
+            <!--http://www.dukascopy.com/client/jforexlib/publicrepo/com/dukascopy/api/JForex-API/-->
+        <!--&ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>com.dukascopy.api</groupId>-->
+            <!--<artifactId>JForex-API</artifactId>-->
+            <!--<version>2.12.15</version>-->
+            <!--<classifier>sources</classifier>-->
+        <!--</dependency>-->
+
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scalap</artifactId>
@@ -159,12 +195,49 @@
             <!--</configuration>-->
         <!--</plugin>-->
         <plugin>
+            <groupId>org.scala-tools</groupId>
+            <artifactId>maven-scala-plugin</artifactId>
+            <executions>
+                <execution>
+                    <id>scala-compile-first</id>
+                    <phase>process-resources</phase>
+                    <goals>
+                        <goal>add-source</goal>
+                        <goal>compile</goal>
+                    </goals>
+                </execution>
+                <execution>
+                    <id>scala-test-compile</id>
+                    <phase>process-test-resources</phase>
+                    <goals>
+                        <goal>testCompile</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <sourceDir>src/main/java</sourceDir>
+                <sourceDir>src/main/scala</sourceDir>
+                <jvmArgs>
+                    <jvmArg>-Xms64m</jvmArg>
+                    <jvmArg>-Xmx1024m</jvmArg>
+                </jvmArgs>
+            </configuration>
+        </plugin>
+        <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
             <version>3.3</version>
+            <executions>
+                <execution>
+                    <phase>compile</phase>
+                    <goals>
+                        <goal>compile</goal>
+                    </goals>
+                </execution>
+            </executions>
             <configuration>
-                <source>${java.version}</source>
-                <target>${java.version}</target>
+                <!--<source>${java.version}</source>-->
+                <!--<target>${java.version}</target>-->
                 <encoding>UTF-8</encoding>
                 <maxmem>1024m</maxmem>
                 <fork>true</fork>

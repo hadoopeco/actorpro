@@ -4,7 +4,7 @@
         xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
     <id>release</id>
     <formats>
-        <format>zip</format>
+        <format>jar</format>
     </formats>
     <fileSets>
         <fileSet>
@@ -20,7 +20,8 @@
     <dependencySets>
         <dependencySet>
             <useProjectArtifact>true</useProjectArtifact>
-            <outputDirectory>lib</outputDirectory><!-- 将scope为runtime的依赖包打包到lib目录下。 -->
+            <unpack>true</unpack>
+            <!--<outputDirectory>lib</outputDirectory>&lt;!&ndash; 将scope为runtime的依赖包打包到lib目录下。 &ndash;&gt;-->
             <scope>runtime</scope>
         </dependencySet>
     </dependencySets>
