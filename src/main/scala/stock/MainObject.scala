@@ -1,6 +1,6 @@
 package stock
 
-import akka.actor.{Actor, Props}
+import akka.actor.{ActorSystem, Actor, Props}
 
 /**
  * Author: weibin(weibin521@pingan.com.cn)
@@ -13,7 +13,7 @@ class MainObject {
 
 object Main extends App{
 
-
+    ActorSystem.create("test");
 
 }
 

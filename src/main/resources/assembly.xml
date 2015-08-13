@@ -19,6 +19,7 @@
 
     <dependencySets>
         <dependencySet>
+            <outputDirectory>/</outputDirectory>
             <useProjectArtifact>true</useProjectArtifact>
             <unpack>true</unpack>
             <!--<outputDirectory>lib</outputDirectory>&lt;!&ndash; 将scope为runtime的依赖包打包到lib目录下。 &ndash;&gt;-->
