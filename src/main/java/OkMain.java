@@ -1,5 +1,9 @@
+import akka.actor.Actor;
 import akka.actor.ActorCell;
+import akka.actor.ActorRef;
+import akka.actor.ActorSystem;
 import scala.collection.immutable.List;
+import stock.ActorFactory;
 
 
 /**
@@ -9,12 +13,7 @@ public class OkMain {
 
     public static void main(String[] args) {
 //        OkCoinSystem.main(args);
-        List lis  = ActorCell.contextStack().get();
-        if(lis.isEmpty()){
-            System.out.println("null actorStack");
-        }else{
-            lis.head();
-        }
-
+//      ActorSystem as = ActorFactory.getActorSystem();
+//      as.actorSelection("../*").tell("test2",null);
     }
 }
