@@ -46,7 +46,7 @@ public class OkMain {
                     }
 //子弹一共13发，打完结束
 //                    ________【4】_________
-                    subtract();
+                    if (i > 12) System.exit(1);
 
                     synchronized(obj){
                         obj.notify();
@@ -55,7 +55,7 @@ public class OkMain {
             }
         };
 //        _________【5】___________
-
+        System.out.println("OkMain.main 游戏开始");
         t1.start();
         t2.start();
     }
