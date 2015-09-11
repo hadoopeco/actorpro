@@ -47,7 +47,6 @@ with StopSystemAfterAll{
         import chapter3.SilentActorProtocal._
         val silentActor = TestActorRef[SilentActor]
         silentActor ! SilentMessage("whisper")
-
         silentActor.underlyingActor.state must contain("whisper")
       }
 

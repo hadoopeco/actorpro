@@ -11,11 +11,13 @@ import akka.routing.{ActorRefRoutee, RoundRobinRoutingLogic, Router}
 
 class Worker extends Actor{
   override def receive: Receive = {
-    case "test" =>
+    case w@Work =>
       print("Worker Test ")
+
 
   }
 }
+case class Work()
 
 class Master extends Actor{
 
@@ -31,15 +33,15 @@ class Master extends Actor{
 
   override def receive: Receive = {
 
-    case w@"test" =>
+    case w@Work =>
       println("Master "+w)
       router.route(w,sender)
     case Terminated(a) =>
-      router.removeRoutee(a)
+      router = router.removeRoutee(a)
       println("remove from routees "+a)
       val r = context.actorOf(Props[Worker])
       context watch r
-      router.addRoutee(r)
+      router = router.addRoutee(r)
   }
 }
 
@@ -47,5 +49,6 @@ class Master extends Actor{
 object Master extends App{
   val as = ActorSystem.create("master")
   val m = as.actorOf(Props[Master])
-  m!"test"
+  var w = Work
+  m!w
 }
