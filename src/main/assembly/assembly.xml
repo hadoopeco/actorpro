@@ -6,14 +6,14 @@
     <formats>
         <format>jar</format>
     </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
     <fileSets>
         <fileSet>
-            <directory>${project.basedir}\src\main\config</directory>
             <!-- 过滤 -->
             <excludes>
-                <exclude>*.xml</exclude>
+                <exclude>META-INF/**</exclude>
             </excludes>
-            <outputDirectory>\</outputDirectory>
+            <outputDirectory>/</outputDirectory>
         </fileSet>
     </fileSets>
 
@@ -22,7 +22,8 @@
             <outputDirectory>/</outputDirectory>
             <useProjectArtifact>true</useProjectArtifact>
             <unpack>true</unpack>
-            <!--<outputDirectory>lib</outputDirectory>&lt;!&ndash; 将scope为runtime的依赖包打包到lib目录下。 &ndash;&gt;-->
+
+            <!-- 将scope为runtime的依赖包打包到lib目录下。 -->
             <scope>runtime</scope>
         </dependencySet>
     </dependencySets>

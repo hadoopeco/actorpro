@@ -1,6 +1,5 @@
 package actor
 
-import actor.BuyOKTicker
 import akka.actor.{Props, ActorSystem, Actor, ActorLogging}
 import com.okcoin.OkcoinAccess
 import com.okcoin.stock.bean.Ticker

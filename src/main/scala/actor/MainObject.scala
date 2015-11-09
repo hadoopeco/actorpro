@@ -1,7 +1,5 @@
 package actor
 
-import com.WxMessage
-import com.alibaba.fastjson.JSON
 
 /**
  * Author: weibin(weibin521@pingan.com.cn)

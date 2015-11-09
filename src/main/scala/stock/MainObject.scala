@@ -2,7 +2,6 @@ package stock
 
 import akka.actor.{Terminated, Actor, ActorSystem, Props}
 import akka.routing.{ActorRefRoutee, RoundRobinRoutingLogic, Router}
-import com.alibaba.fastjson.JSON
 
 
 /**
