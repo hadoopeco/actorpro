@@ -15,8 +15,7 @@ import java.io.IOException;
  * Time: 21:05
  */
 public class OkcoinAccess {
-    String api_key = "6cf8b5b2-0d48-4da4-b0ea-118b4f6998dd";  //OKCoin申请的apiKey
-    String secret_key = "BFA9F2CE90106DE5B8AC1AB8C7138C38";  //OKCoin 申请的secret_key
+
     String url_prex = "https://www.okcoin.cn";  //注意：请求URL 国际站https://www.okcoin.com ; 国内站https://www.okcoin.cn
     String trade_coin = "btc_cny";
     IStockRestApi stockPost = new StockRestApi(url_prex, api_key, secret_key);
