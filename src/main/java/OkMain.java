@@ -1,18 +1,11 @@
-import akka.actor.Actor;
-import akka.actor.ActorCell;
-import akka.actor.ActorRef;
-import akka.actor.ActorSystem;
-import scala.collection.immutable.List;
-import stock.ActorFactory;
-
-
 /**
  * Created by lenovo on 2015/7/9.
  */
 public class OkMain {
     public static Object obj=new Object();
     public static int i=0;
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
+
         Thread t1=new Thread(){
             public void run(){
                 while(true){
@@ -27,7 +20,10 @@ public class OkMain {
 //                            ______【2】_______
                             obj.wait();
                         } catch (InterruptedException e) {
-                            e.printStackTrace();}}}}};
+                            e.printStackTrace();}}
+                }}
+        };
+
         Thread t2=new Thread(){
             public void  run(){
                 while(true){
@@ -49,13 +45,14 @@ public class OkMain {
                     if (i > 12) System.exit(1);
 
                     synchronized(obj){
+
                         obj.notify();
                     }
                 }
             }
         };
 //        _________【5】___________
-        System.out.println("OkMain.main 游戏开始");
+        t1.setPriority(2);
         t1.start();
         t2.start();
     }
