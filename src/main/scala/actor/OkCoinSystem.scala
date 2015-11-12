@@ -32,8 +32,8 @@ class OkCoinSystem extends Actor with ActorLogging{
   }
 
   context.system.scheduler.schedule(10 seconds,3 minutes){
+//  context.system.scheduler.schedule(10 seconds,60 seconds){
      if (ticker != null) {
-//       if (count == 0) {
          if (tickerque.size >= 20) {
            tickerque.dequeue()
          }
@@ -43,8 +43,6 @@ class OkCoinSystem extends Actor with ActorLogging{
         } else {
           log.info("prices size less than 20  size = {}", tickerque.size)
         }
-
-//       }
      }else{
        log.info("get null ticker")
      }
