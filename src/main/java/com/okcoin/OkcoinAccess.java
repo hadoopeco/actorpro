@@ -15,9 +15,11 @@ import java.io.IOException;
  * Time: 21:05
  */
 public class OkcoinAccess {
-
+    String api_key = "442d9f7a-f794-4da9-ab81-cf20ace6e0ac";  //OKCoin申请的apiKey
+    String secret_key = "67C1D3265DB40AFEE8E67A065C476EFE";  //OKCoin 申请的secret_key
     String url_prex = "https://www.okcoin.cn";  //注意：请求URL 国际站https://www.okcoin.com ; 国内站https://www.okcoin.cn
     String trade_coin = "btc_cny";
+    String trade_amount = "0.09";
     IStockRestApi stockPost = new StockRestApi(url_prex, api_key, secret_key);
 
     public Ticker retrieveMsg() {
@@ -37,25 +39,28 @@ public class OkcoinAccess {
         return ticker;
     }
 
-    public void buyTicker(Float buyprice){
-
-        try {
-            stockPost.trade(trade_coin, "buy", String.valueOf(buyprice+1), "0.12");
-        } catch (HttpException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void buyTicker(Float curprice){
+        synchronized (this) {
+            try {
+                stockPost.trade(trade_coin, "buy", String.valueOf(curprice + 10), trade_amount);
+            } catch (HttpException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
 
-    public void sellTicker(Float buyprice){
-        try {
-            stockPost.trade(trade_coin, "sell",  String.valueOf(buyprice-1),"0.12");
-        } catch (HttpException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void sellTicker(Float curprice){
+        synchronized (this) {
+            try {
+                stockPost.trade(trade_coin, "sell", String.valueOf(curprice - 10), trade_amount);
+            } catch (HttpException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
