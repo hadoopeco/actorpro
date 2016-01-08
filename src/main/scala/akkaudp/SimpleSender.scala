@@ -26,7 +26,7 @@ class SimpleSender(remoter:InetSocketAddress) extends Actor{
   }
 }
 
-object SimpleSender{
+object SimpleSender extends App{
 
   def props(remoter:InetSocketAddress) = Props(new SimpleSender(remoter))
 }
