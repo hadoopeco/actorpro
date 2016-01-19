@@ -1,6 +1,5 @@
 package chapter16
 
-import shapeless.list
 
 import scala.xml.dtd.{PublicID, DocType}
 import scala.xml.transform.{RuleTransformer, RewriteRule}

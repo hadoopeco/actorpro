@@ -224,9 +224,14 @@
                 <sourceDir>src/main/java</sourceDir>
                 <sourceDir>src/main/scala</sourceDir>
                 <jvmArgs>
-                    <jvmArg>-Xms64m</jvmArg>
+                    <jvmArg>-Xms1024m</jvmArg>
                     <jvmArg>-Xmx1024m</jvmArg>
+                    <jvmArg>-XX:ReservedCodeCacheSize=128m</jvmArg>
                 </jvmArgs>
+                <!--<jvmArgs>-->
+                    <!--<jvmArg>-Xms64m</jvmArg>-->
+                    <!--<jvmArg>-Xmx1024m</jvmArg>-->
+                <!--</jvmArgs>-->
             </configuration>
         </plugin>
         <plugin>
